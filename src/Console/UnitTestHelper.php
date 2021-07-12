@@ -156,17 +156,17 @@ class UnitTestHelper{
     }
 
     public function addTestAttributes(){
-        $this->output.='public function testAttributes(){';
+        $this->output.="\tpublic function testAttributes()\n\t{";
 
         foreach ($this->properties as $property){
-            $this->output.='$this->assertClassHasAttribute('.$property->props[0]->name->name.','.$this->class->name->name.'::class);';
+            $this->output.="\n\t\t".'$this->assertClassHasAttribute(\''.$property->props[0]->name->name.'\','.$this->class->name->name.'::class);';
         }
 
-        $this->output.='}';
+        $this->output.="\n\t}";
     }
 
     public function closeClass(){
-        $this->output.='}';
+        $this->output.="\n}";
     }
 
 }
