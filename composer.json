@@ -23,7 +23,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "amims71\\auto-test\\src\\TestServiceProvider"
+                "Amims71\\AutoTest\\TestServiceProvider"
             ]
         }
     }
