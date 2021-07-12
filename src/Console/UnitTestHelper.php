@@ -118,7 +118,6 @@ class UnitTestHelper{
     }
 
     public function addMethods($testMethods,$method){
-
         $prprty='';
         $asrt='';
         if (@$method->returnType->name=='void'){
@@ -154,6 +153,16 @@ class UnitTestHelper{
             $testMethods.="\t".'public function test'.ucfirst($method->name->name).'(): void'."\n\t".'{'."\n\t\t".'$expected = \'\';//TODO set test value'."\n\t\t".$prprty."\n\t\t".$asrt."\n\t".'}'."\n\n";
         }
         return $testMethods;
+    }
+
+    public function addTestAttributes(){
+        $this->output.='public function testAttributes(){';
+
+        foreach ($this->properties as $property){
+            $this->output.='$this->assertClassHasAttribute('.$property->props[0]->name->name.','.$this->class->name->name.'::class);';
+        }
+
+        $this->output.='}';
     }
 
     public function closeClass(){

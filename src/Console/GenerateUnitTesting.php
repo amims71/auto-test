@@ -78,6 +78,7 @@ class GenerateUnitTesting extends Command
                 $testMethods=$this->unitTestHelper->addMethods($testMethods,$method);
             }
             $this->unitTestHelper->output.=$testMethods;
+            $this->unitTestHelper->addTestAttributes();
             $this->unitTestHelper->closeClass();
             file_put_contents('tests/'.$this->unitTestHelper->className.'UMLTest.php',$this->unitTestHelper->output);
             $this->info($this->unitTestHelper->output);
@@ -85,13 +86,3 @@ class GenerateUnitTesting extends Command
         }
     }
 }
-
-/*what us ast? why used ast? data flow or not using ast?
-    relative studies, why it is better?
-    testing accuracy
-user experience from 4-5 php developers
-Future Plan:
-    generate all test cases from expressions
-    increase scope of assertion
-    integration test
-*/
