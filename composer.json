@@ -1,0 +1,29 @@
+{
+    "name": "amims71/auto-test",
+    "description": "Your can create automated Unit Test Class from a Class or UML",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Amimul Ehshan",
+            "email": "amimulehshan29@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "phpunit/phpunit": "^9.3.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/",
+            "WisdmLabs\\Todolist\\": "packages/amims71/auto-test/src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "amims71\\wuto-test\\TestServiceProvider"
+            ]
+        }
+    }
+}
