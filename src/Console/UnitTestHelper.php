@@ -149,7 +149,9 @@ class UnitTestHelper{
                 }
             }
             $paramNames=implode(',', $paramNames);
-            $asrt='$this->assertSame($expected, $this->'.lcfirst($this->class->name->name).'->'.$method->name->name.'('.$paramNames.'));';
+            $asserType='assertSame';
+            if (@$method->returnType->name=='int') $asserType='assertEquals';
+            $asrt='$this->'.$asserType.'($expected, $this->'.lcfirst($this->class->name->name).'->'.$method->name->name.'('.$paramNames.'));';
             $testMethods.="\t".'public function test'.ucfirst($method->name->name).'(): void'."\n\t".'{'."\n\t\t".'$expected = \'\';//TODO set test value'."\n\t\t".$prprty."\n\t\t".$asrt."\n\t".'}'."\n\n";
         }
         return $testMethods;
