@@ -17,7 +17,7 @@
     "autoload": {
         "psr-4": {
             "App\\": "app/",
-            "WisdmLabs\\Todolist\\": "packages/amims71/auto-test/src/"
+            "Amims71\\AutoTest\\": "src/"
         }
     },
     "extra": {
