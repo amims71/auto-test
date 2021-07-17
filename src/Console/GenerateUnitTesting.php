@@ -40,49 +40,53 @@ class GenerateUnitTesting extends Command
      */
     public function handle()
     {
-        $file=$this->argument('file');
-        $type=$this->argument('type');
-        if ($type=='php'){
-            $this->unitTestHelper=new UnitTestHelper($file);
-            $this->unitTestHelper->addNameSpace('tests');
-            $this->unitTestHelper->addRequires($file);
-            $this->unitTestHelper->addUses();
-            $this->unitTestHelper->addClassname();
-            $this->unitTestHelper->addClassObject();
-            $this->unitTestHelper->addProperties();
-            $this->unitTestHelper->addSetUp();
-            $this->unitTestHelper->addConstructedObject();
-            $this->unitTestHelper->addTearDownMethod();
-            $testMethods='';
-            foreach ($this->unitTestHelper->methods as $method){
-                $testMethods=$this->unitTestHelper->addMethods($testMethods,$method);
-            }
-            $this->unitTestHelper->output.=$testMethods;
-            $this->unitTestHelper->addTestAttributes();
-            $this->unitTestHelper->closeClass();
-            $fileName='tests/'.$this->unitTestHelper->class->name->name.'Test.php';
-            file_put_contents($fileName,$this->unitTestHelper->output);
-            $this->info($this->unitTestHelper->output);
-        } elseif ($type=='json'){
-            $this->unitTestHelper=new UnitTestHelperJson($file);
-            $this->unitTestHelper->addNameSpace('tests');
-            $this->unitTestHelper->addRequires();
-            $this->unitTestHelper->addUses();
-            $this->unitTestHelper->addClassname();
-            $this->unitTestHelper->addClassObject();
-            $this->unitTestHelper->addProperties();
-            $this->unitTestHelper->addSetUp();
-            $this->unitTestHelper->addConstructedObject();
-            $this->unitTestHelper->addTearDownMethod();
-            $testMethods='';
-            foreach ($this->unitTestHelper->methods as $method){
-                $testMethods=$this->unitTestHelper->addMethods($testMethods,$method);
-            }
-            $this->unitTestHelper->output.=$testMethods;
-            $this->unitTestHelper->closeClass();
-            file_put_contents('tests/'.$this->unitTestHelper->className.'UMLTest.php',$this->unitTestHelper->output);
-            $this->info($this->unitTestHelper->output);
+        try{
+            $file=$this->argument('file');
+            $type=$this->argument('type');
+            if ($type=='php'){
+                $this->unitTestHelper=new UnitTestHelper($file);
+                $this->unitTestHelper->addNameSpace('tests');
+                $this->unitTestHelper->addRequires($file);
+                $this->unitTestHelper->addUses();
+                $this->unitTestHelper->addClassname();
+                $this->unitTestHelper->addClassObject();
+                $this->unitTestHelper->addProperties();
+                $this->unitTestHelper->addSetUp();
+                $this->unitTestHelper->addConstructedObject();
+                $this->unitTestHelper->addTearDownMethod();
+                $testMethods='';
+                foreach ($this->unitTestHelper->methods as $method){
+                    $testMethods=$this->unitTestHelper->addMethods($testMethods,$method);
+                }
+                $this->unitTestHelper->output.=$testMethods;
+                $this->unitTestHelper->addTestAttributes();
+                $this->unitTestHelper->closeClass();
+                $fileName='tests/'.$this->unitTestHelper->class->name->name.'Test.php';
+                file_put_contents($fileName,$this->unitTestHelper->output);
+                $this->info($this->unitTestHelper->output);
+            } elseif ($type=='json'){
+                $this->unitTestHelper=new UnitTestHelperJson($file);
+                $this->unitTestHelper->addNameSpace('tests');
+                $this->unitTestHelper->addRequires();
+                $this->unitTestHelper->addUses();
+                $this->unitTestHelper->addClassname();
+                $this->unitTestHelper->addClassObject();
+                $this->unitTestHelper->addProperties();
+                $this->unitTestHelper->addSetUp();
+                $this->unitTestHelper->addConstructedObject();
+                $this->unitTestHelper->addTearDownMethod();
+                $testMethods='';
+                foreach ($this->unitTestHelper->methods as $method){
+                    $testMethods=$this->unitTestHelper->addMethods($testMethods,$method);
+                }
+                $this->unitTestHelper->output.=$testMethods;
+                $this->unitTestHelper->closeClass();
+                file_put_contents('tests/'.$this->unitTestHelper->className.'UMLTest.php',$this->unitTestHelper->output);
+                $this->info($this->unitTestHelper->output);
 
+            }
+        } catch (\Exception $exception){
+            $this->info($exception->getMessage());
         }
     }
 }
