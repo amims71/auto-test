@@ -9,7 +9,7 @@
             "email": "amimulehshan29@gmail.com"
         }
     ],
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "require": {
         "phpunit/phpunit": "^9.3.3",
         "nikic/php-parser": "^4.10"
