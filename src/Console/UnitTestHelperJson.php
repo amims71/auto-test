@@ -25,16 +25,18 @@ class UnitTestHelperJson{
         $this->parsedInput=json_decode($input);
 
         $this->className=$this->parsedInput->className;
-        $this->properties=$this->parsedInput->properties;
-        $statements=$this->parsedInput->methods;
+        $this->properties=$this->parsedInput->properties??[];
+        $statements=$this->parsedInput->methods??[];
         $this->methods=[];
         foreach ($statements as $statement){
             if ($statement->name=='__construct') $this->constructor=$statement;
             else array_push($this->methods,$statement);
         }
 
-        foreach ($this->constructor->arguments as $param){
-            $this->constructorParams.='$this->'.$param->name.',';
+        if ($this->constructor){
+            foreach ($this->constructor->arguments as $param){
+                $this->constructorParams.='$this->'.$param->name.',';
+            }
         }
         $this->constructorParams=substr($this->constructorParams, 0, -1);
     }
