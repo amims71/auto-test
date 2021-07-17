@@ -17,21 +17,30 @@ class UnitTestHelper{
     public $methods=[];
     public $constructor='';
     public $constructorParams='';
+    public $classIndex=0;
 
     public function __construct($file){
         $code=file_get_contents($file);
         $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
+
+        //parse code
         try {
             $ast=$parser->parse($code);
         } catch (Error $error) {
             echo "Parse error: {$error->getMessage()}\n";
         }
         $this->object=$ast[0];
-        $this->class=$this->object->stmts[0];
+
+        //get class index in ast
+        $this->classIndex=sizeof($this->object->stmts)-1;
+
+        //get class
+        $this->class=$this->object->stmts[$this->classIndex];
+        //get methods and fields from the class
         $statements=$this->class->stmts;
 
-        $extendedClass=$this->class->extends->parts[0];
 
+        //separate fields, methods and constructor
         foreach ($statements as $statement){
             if ($statement instanceof Property){
                 array_push($this->properties,$statement); //add properties to property list
@@ -41,35 +50,48 @@ class UnitTestHelper{
             }
         }
 
-        //add properties and methods in list from extended class
+        //add properties and methods in list from extended class if exists
+        $extendedClass=@$this->class->extends->parts[0];
         if ($extendedClass){
+
+            //get extended file location
             $fileArray=explode('/',$file);
             array_pop($fileArray);
             array_push($fileArray,$extendedClass.'.php');
             $extendedFile=implode('/',$fileArray);
             $code=file_get_contents($extendedFile);
 
+            //parse code
             try {
                 $ast=$parser->parse($code);
             } catch (Error $error) {
                 echo "Parse error: {$error->getMessage()}\n";
             }
-            $statements=$ast[0]->stmts[0]->stmts;
 
+            $classIndex=sizeof($ast[0]->stmts)-1;
+            $statements=$ast[0]->stmts[$classIndex]->stmts;
+
+            //separate fields and methods
             foreach ($statements as $statement){
                 if ($statement instanceof Property){
                     array_push($this->properties,$statement); //add properties to property list
                 } elseif ($statement instanceof ClassMethod){
-                    if ($statement->name->name=='__construct') $this->constructor=$statement;
+                    if ($statement->name->name=='__construct') continue; //ignore extended class constructor
                     else array_push($this->methods,$statement); //add methods to methods list
                 }
             }
         }
 
-        foreach ($this->constructor->params as $param){
-            $this->constructorParams.='$this->'.$param->var->name.',';
+        //check if constructor has params
+        $constructorParams=@$this->constructor->params;
+        if ($constructorParams){
+            foreach ($constructorParams as $param){
+                $this->constructorParams.='$this->'.$param->var->name.',';
+            }
+            $this->constructorParams=substr($this->constructorParams, 0, -1);
+        } else{
+            $constructorParams=null;
         }
-        $this->constructorParams=substr($this->constructorParams, 0, -1);
     }
 
     public function addNameSpace($nameSpace){
