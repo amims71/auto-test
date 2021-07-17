@@ -8,3 +8,4 @@
 
 - `php artisan php app/Model/Person.php`
 - `php artisan json app/Uml/Person.json`
+- `vendor/bin/phpunit`
