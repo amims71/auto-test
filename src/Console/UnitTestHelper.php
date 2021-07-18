@@ -180,13 +180,15 @@ class UnitTestHelper{
     }
 
     public function addTestAttributes(){
-        $this->output.="\tpublic function testAttributes()\n\t{";
+        if (sizeof($this->properties)>0){
+            $this->output.="\tpublic function testAttributes()\n\t{";
 
-        foreach ($this->properties as $property){
-            $this->output.="\n\t\t".'$this->assertClassHasAttribute(\''.$property->props[0]->name->name.'\','.$this->class->name->name.'::class);';
+            foreach ($this->properties as $property){
+                $this->output.="\n\t\t".'$this->assertClassHasAttribute(\''.$property->props[0]->name->name.'\','.$this->class->name->name.'::class);';
+            }
+
+            $this->output.="\n\t}";
         }
-
-        $this->output.="\n\t}";
     }
 
     public function closeClass(){
