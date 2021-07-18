@@ -74,10 +74,10 @@ class UnitTestHelper{
             //separate fields and methods
             foreach ($statements as $statement){
                 if ($statement instanceof Property){
-                    array_push($this->properties,$statement); //add properties to property list
+                    if ($statement->flags<4) array_push($this->properties,$statement); //add public and protected properties to property list
                 } elseif ($statement instanceof ClassMethod){
                     if ($statement->name->name=='__construct') continue; //ignore extended class constructor
-                    else array_push($this->methods,$statement); //add methods to methods list
+                    elseif ($statement->flags<4) array_push($this->methods,$statement); //add public and protected methods to methods list
                 }
             }
         }
